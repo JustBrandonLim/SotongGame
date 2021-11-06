@@ -9,7 +9,7 @@
         Height="600" 
         Width="800"
         ResizeMode="CanResize"
-        MinHeight="450"
+        MinHeight="600"
         MinWidth="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -46,25 +46,6 @@
                         <ColumnDefinition 
                             Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox 
-                        Header="Server"
-                        Grid.Row="0"
-                        Grid.RowSpan="3"
-                        Grid.Column="0">
-                        <StackPanel>
-                            <TextBlock
-                                Text="Status: "
-                                Margin="5"/>
-                            <TextBlock 
-                                Text="OFFLINE"
-                                Margin="5"/>
-                            <Button
-                                Name="StartStopServerButton"
-                                Content="Start/Stop"
-                                Click="StartStopButton_Click"
-                                Margin="5"/>
-                        </StackPanel>
-                    </GroupBox>
                     <GroupBox
                         Header="Question"
                         Grid.Row="0"
@@ -102,7 +83,7 @@
                                 Name="OptionFourTextBox"
                                 Margin="5"/>
                             <TextBlock 
-                                Text="Answer:"
+                                Text="Correct Answer:"
                                 Margin="5"/>
                             <ListBox
                                 Name="AnswerListBox"
@@ -131,10 +112,12 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -142,36 +125,67 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Name="QuestionNumberTextBlock"
-                        Text="Question No: 1"
+                        Text="Q?"
                         Margin="5"/>
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         Name="QuestionContentTextBlock"
-                        Text="-"
+                        Text="NO MORE QUESTIONS"
                         Margin="5"/>
                     <Button
                         Grid.Row="1"
                         Grid.Column="1"
+                        Name="ShowSubmissionsButton"
+                        Content="Show Submissions"
+                        Click="ShowAnswerButton_Click"
+                        Margin="5"/>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="2"
                         Name="ShowAnswerButton"
                         Content="Show Answer"
                         Click="ShowAnswerButton_Click"
                         Margin="5"/>
                     <Button
                         Grid.Row="1"
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Name="NextQuestionButton"
                         Content="Next Question"
                         Click="NextQuestionButton_Click"
                         Margin="5"/>
-                    <TextBlock
+                    <StackPanel
                         Grid.Row="2"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Name="AnswerTextBlock"
-                        Text="The answer is: "
-                        Margin="5"/>
+                        Grid.ColumnSpan="3"
+                        Name="OptionsStackPanel"
+                        Orientation="Vertical"
+                        Margin="5">
+                        <TextBlock
+                            Text="Option 1: "
+                            FontWeight="Bold"
+                            Name="OptionOneTextBlock"/>
+                        <TextBlock
+                            Text="Option 2: "
+                            FontWeight="Bold"
+                            Name="OptionTwoTextBlock"/>
+                        <TextBlock
+                            Text="Option 3: "
+                            FontWeight="Bold"
+                            Name="OptionThreeTextBlock"/>
+                        <TextBlock
+                            Text="Option 4: "
+                            FontWeight="Bold"
+                            Name="OptionFourTextBlock"/>
+                    </StackPanel>
+                    <ListView
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        Name="SubmissionsListView"
+                        Margin="5">
+                    </ListView>
                 </Grid>
             </TabItem>
         </TabControl>

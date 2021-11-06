@@ -27,20 +27,17 @@ namespace TinyStudent
     {
         private const string BASE_ADDRESS = "http://localhost:9000/";
 
-        private static readonly HttpClient httpClient = new HttpClient();
+        private static readonly HttpClient httpClient = new();
 
-        private static int currentQuestionIndex = 0;
+        private static int questionIndex = 0;
 
-        private Question currentQuestion = null;
+        private Question currentQuestion;
 
+        private Random random = new Random();
+        
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private async void StartStopButton_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(AppDomain.CurrentDomain.BaseDirectory + "TinyStudentServer.exe"));
         }
 
         private async void AddQuestionButton_Click(object sender, RoutedEventArgs e)
@@ -62,7 +59,7 @@ namespace TinyStudent
 
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var postRequest = await httpClient.PostAsync(BASE_ADDRESS + "/api/question/", byteContent);
+            var postRequest = await httpClient.PostAsync(BASE_ADDRESS + "/api/question/addquestion", byteContent);
 
             if (postRequest.IsSuccessStatusCode)
                 MessageBox.Show("Question has been added!", "TinyStudent", MessageBoxButton.OK);
@@ -70,23 +67,66 @@ namespace TinyStudent
 
         private async void ShowAnswerButton_Click(object sender, RoutedEventArgs e)
         {
-            AnswerTextBlock.Text = "The answer is: " + currentQuestion.Options[currentQuestion.Answer];
+            MessageBox.Show("The answer is: " + currentQuestion.Options[currentQuestion.Answer], "TinyStudent", MessageBoxButton.OK);
         }
 
         private async void NextQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            var getRequest = await httpClient.GetAsync(BASE_ADDRESS + "/api/question/" + currentQuestionIndex.ToString());
+            var getRequest = await httpClient.GetAsync(BASE_ADDRESS + "/api/question/getquestion/" + questionIndex);
 
-#pragma warning disable CS8601 // Possible null reference assignment.
+            #pragma warning disable CS8601 // Possible null reference assignment.
             currentQuestion = JsonConvert.DeserializeObject<Question>(await getRequest.Content.ReadAsStringAsync());
-#pragma warning restore CS8601 // Possible null reference assignment.
 
-            currentQuestionIndex++;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            if (currentQuestion.Content == "NO MORE QUESTIONS")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            {
+                QuestionNumberTextBlock.Text = "Q?";
+                OptionOneTextBlock.Text = "Option 1: ";
+
+                OptionTwoTextBlock.Text = "Option 2: ";
+
+                OptionThreeTextBlock.Text = "Option 3: ";
+
+                OptionFourTextBlock.Text = "Option 4: ";
+            }
+            else
+            {
+                List<Brush> kahootColours = new()
+                {
+                    Brushes.OrangeRed,
+                    Brushes.PaleGreen,
+                    Brushes.SkyBlue,
+                    Brushes.Gold
+                };
+
+                QuestionNumberTextBlock.Text = "Q" + questionIndex.ToString();
+
+                OptionOneTextBlock.Text = "Option 1: " + currentQuestion.Options[0];
+                int optionOneColour = random.Next(0, 4);
+                OptionOneTextBlock.Background = kahootColours[optionOneColour];
+                kahootColours.Remove(kahootColours[optionOneColour]);
+
+                OptionTwoTextBlock.Text = "Option 2: " + currentQuestion.Options[1];
+                int optionTwoColour = random.Next(0, 3);
+                OptionTwoTextBlock.Background = kahootColours[optionTwoColour];
+                kahootColours.Remove(kahootColours[optionTwoColour]);
+
+                OptionThreeTextBlock.Text = "Option 3: " + currentQuestion.Options[2];
+                int optionThreeColour = random.Next(0, 2);
+                OptionThreeTextBlock.Background = kahootColours[optionThreeColour];
+                kahootColours.Remove(kahootColours[optionThreeColour]);
+
+                OptionFourTextBlock.Text = "Option 4: " + currentQuestion.Options[3];
+                int optionFourColour = random.Next(0, 1);
+                OptionFourTextBlock.Background = kahootColours[optionFourColour];
+                kahootColours.Remove(kahootColours[optionFourColour]);
+            }
 
             QuestionContentTextBlock.Text = currentQuestion.Content;
-            QuestionNumberTextBlock.Text = "Question No: " + currentQuestionIndex;
+#pragma warning restore CS8601 // Possible null reference assignment.
 
-            AnswerTextBlock.Text = "";
+            questionIndex++;
         }
     }
 }

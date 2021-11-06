@@ -14,10 +14,9 @@ namespace TinyStudentServer
 
         static void Main(string[] args)
         {
-            Console.WriteLine("STARTING TINYSTUDENT SERVER...");
             using (WebApp.Start<Startup>(BASE_ADDRESS))
             {
-                Console.WriteLine("STARTED TINYSTUDENT SERVER...");
+                Console.WriteLine("--- TINYSTUDENT SERVER STARTED ---");
                 Console.ReadLine();
             }
         }
