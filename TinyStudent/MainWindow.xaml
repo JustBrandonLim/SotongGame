@@ -1,0 +1,179 @@
+﻿<Window x:Class="TinyStudent.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TinyStudent"
+        mc:Ignorable="d"
+        Title="TinyStudent" 
+        Height="600" 
+        Width="800"
+        ResizeMode="CanResize"
+        MinHeight="450"
+        MinWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="3">
+            <TabItem
+                Header="Administration">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition 
+                            Height="auto"/>
+                        <RowDefinition 
+                            Height="auto"/>
+                        <RowDefinition 
+                            Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition 
+                            Width="auto"/>
+                        <ColumnDefinition 
+                            Width="*"/>
+                        <ColumnDefinition 
+                            Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox 
+                        Header="Server"
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Grid.Column="0">
+                        <StackPanel>
+                            <TextBlock
+                                Text="Status: "
+                                Margin="5"/>
+                            <TextBlock 
+                                Text="OFFLINE"
+                                Margin="5"/>
+                            <Button
+                                Name="StartStopServerButton"
+                                Content="Start/Stop"
+                                Click="StartStopButton_Click"
+                                Margin="5"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox
+                        Header="Question"
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Grid.Column="1">
+                        <StackPanel>
+                            <TextBlock 
+                                Text="Content:"
+                                Margin="5"/>
+                            <TextBox
+                                Name="ContentTextBox"
+                                Margin="5"/>
+                            <TextBlock 
+                                Text="Option One:"
+                                Margin="5"/>
+                            <TextBox
+                                Name="OptionOneTextBox"
+                                Margin="5"/>
+                            <TextBlock 
+                                Text="Option Two:"
+                                Margin="5"/>
+                            <TextBox
+                                Name="OptionTwoTextBox"
+                                Margin="5"/>
+                            <TextBlock 
+                                Text="Option Three:"
+                                Margin="5"/>
+                            <TextBox
+                                Name="OptionThreeTextBox"
+                                Margin="5"/>
+                            <TextBlock 
+                                Text="Option Four:"
+                                Margin="5"/>
+                            <TextBox
+                                Name="OptionFourTextBox"
+                                Margin="5"/>
+                            <TextBlock 
+                                Text="Answer:"
+                                Margin="5"/>
+                            <ListBox
+                                Name="AnswerListBox"
+                                Margin="5">
+                                <ListBoxItem
+                                    Content="Option One"/>
+                                <ListBoxItem
+                                    Content="Option Two"/>
+                                <ListBoxItem
+                                    Content="Option Three"/>
+                                <ListBoxItem
+                                    Content="Option Four"/>
+                            </ListBox>
+                            <Button
+                                Name="AddQuestionButton"
+                                Content="Add Question"
+                                Click="AddQuestionButton_Click"
+                                Margin="5"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem
+                Header="TinyStudent">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Name="QuestionNumberTextBlock"
+                        Text="Question No: 1"
+                        Margin="5"/>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Name="QuestionContentTextBlock"
+                        Text="-"
+                        Margin="5"/>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Name="ShowAnswerButton"
+                        Content="Show Answer"
+                        Click="ShowAnswerButton_Click"
+                        Margin="5"/>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Name="NextQuestionButton"
+                        Content="Next Question"
+                        Click="NextQuestionButton_Click"
+                        Margin="5"/>
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Name="AnswerTextBlock"
+                        Text="The answer is: "
+                        Margin="5"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
