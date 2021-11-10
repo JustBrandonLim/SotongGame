@@ -29,9 +29,9 @@ namespace TinyStudent
 
         private static readonly HttpClient httpClient = new();
 
-        private static int questionIndex = 0;
-
+        private int currentQuestionIndex = 0;
         private Question currentQuestion;
+        private Answer currentAnswer;
 
         private Random random = new Random();
         
@@ -65,21 +65,70 @@ namespace TinyStudent
                 MessageBox.Show("Question has been added!", "TinyStudent", MessageBoxButton.OK);
         }
 
-        private async void ShowAnswerButton_Click(object sender, RoutedEventArgs e)
+        private async void ShowSubmissionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            int optionOneCount = 0;
+            int optionTwoCount = 0;
+            int optionThreeCount = 0;
+            int optionFourCount = 0;
+
+            HttpResponseMessage getSubmissionsRequest = await httpClient.GetAsync(BASE_ADDRESS + "/api/question/getsubmissions/");
+
+            #pragma warning disable CS8601 // Possible null reference assignment.
+            currentAnswer = JsonConvert.DeserializeObject<Answer>(await getSubmissionsRequest.Content.ReadAsStringAsync());
+
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
+            foreach (int answerSubmitted in currentAnswer.Answers)
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
+            {
+                switch (answerSubmitted)
+                {
+                    case 1:
+                        optionOneCount++;
+                        break;
+                    case 2:
+                        optionTwoCount++;  
+                        break;
+                    case 3:
+                        optionThreeCount++; 
+                        break;
+                    case 4:
+                        optionFourCount++; 
+                        break;
+                }
+            }
+
+            #pragma warning restore CS8601 // Possible null reference assignment.
+            OptionOneSubmissionsTextBlock.Text = "Option 1: " + optionOneCount.ToString();
+            OptionTwoSubmissionsTextBlock.Text = "Option 2: " + optionTwoCount.ToString();
+            OptionThreeSubmissionsTextBlock.Text = "Option 4: " + optionThreeCount.ToString();
+            OptionFourSubmissionsTextBlock.Text = "Option 4: " + optionFourCount.ToString();
+        }
+
+        private void ShowAnswerButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("The answer is: " + currentQuestion.Options[currentQuestion.Answer], "TinyStudent", MessageBoxButton.OK);
         }
 
-        private async void NextQuestionButton_Click(object sender, RoutedEventArgs e)
+        private async void GetQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            var getRequest = await httpClient.GetAsync(BASE_ADDRESS + "/api/question/getquestion/" + questionIndex);
+            OptionOneSubmissionsTextBlock.Text = "";
+            OptionTwoSubmissionsTextBlock.Text = "";
+            OptionThreeSubmissionsTextBlock.Text = "";
+            OptionFourSubmissionsTextBlock.Text = "";
+
+            HttpResponseMessage getQuestionIndexRequest = await httpClient.GetAsync(BASE_ADDRESS + "/api/question/getquestionindex/");
+            HttpResponseMessage getQuestionRequest = await httpClient.GetAsync(BASE_ADDRESS + "/api/question/getquestion/");
+
+            string questionIndexContent = await getQuestionIndexRequest.Content.ReadAsStringAsync();
+            currentQuestionIndex = Convert.ToInt32(questionIndexContent);
 
             #pragma warning disable CS8601 // Possible null reference assignment.
-            currentQuestion = JsonConvert.DeserializeObject<Question>(await getRequest.Content.ReadAsStringAsync());
+            currentQuestion = JsonConvert.DeserializeObject<Question>(await getQuestionRequest.Content.ReadAsStringAsync());
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            if (currentQuestion.Content == "NO MORE QUESTIONS")
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
+            if (currentQuestion.Content == "NO AVAILABLE QUESTIONS")
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
             {
                 QuestionNumberTextBlock.Text = "Q?";
                 OptionOneTextBlock.Text = "Option 1: ";
@@ -100,7 +149,7 @@ namespace TinyStudent
                     Brushes.Gold
                 };
 
-                QuestionNumberTextBlock.Text = "Q" + questionIndex.ToString();
+                QuestionNumberTextBlock.Text = "Q" + currentQuestionIndex.ToString();
 
                 OptionOneTextBlock.Text = "Option 1: " + currentQuestion.Options[0];
                 int optionOneColour = random.Next(0, 4);
@@ -124,9 +173,10 @@ namespace TinyStudent
             }
 
             QuestionContentTextBlock.Text = currentQuestion.Content;
-#pragma warning restore CS8601 // Possible null reference assignment.
+            #pragma warning restore CS8601 // Possible null reference assignment.
 
-            questionIndex++;
+            ShowSubmissionsButton.IsEnabled = true;
+            ShowAnswerButton.IsEnabled = true;
         }
     }
 }

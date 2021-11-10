@@ -10,13 +10,13 @@ namespace TinyStudentServer
 {
     public class Program
     {
-        private const string BASE_ADDRESS = "http://localhost:9000/";
+        private const string BASE_ADDRESS = "http://*:9000/";
 
         static void Main(string[] args)
         {
             using (WebApp.Start<Startup>(BASE_ADDRESS))
             {
-                Console.WriteLine("--- TINYSTUDENT SERVER STARTED ---");
+                Console.WriteLine("SERVER STARTED");
                 Console.ReadLine();
             }
         }

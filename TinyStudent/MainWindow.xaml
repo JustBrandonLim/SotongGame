@@ -132,16 +132,18 @@
                         Grid.Column="1"
                         Grid.ColumnSpan="3"
                         Name="QuestionContentTextBlock"
-                        Text="NO MORE QUESTIONS"
+                        Text="NO AVAILABLE QUESTIONS"
                         Margin="5"/>
                     <Button
+                        IsEnabled="False"
                         Grid.Row="1"
                         Grid.Column="1"
                         Name="ShowSubmissionsButton"
                         Content="Show Submissions"
-                        Click="ShowAnswerButton_Click"
+                        Click="ShowSubmissionsButton_Click"
                         Margin="5"/>
                     <Button
+                        IsEnabled="False"
                         Grid.Row="1"
                         Grid.Column="2"
                         Name="ShowAnswerButton"
@@ -151,9 +153,9 @@
                     <Button
                         Grid.Row="1"
                         Grid.Column="3"
-                        Name="NextQuestionButton"
-                        Content="Next Question"
-                        Click="NextQuestionButton_Click"
+                        Name="GetQuestionButton"
+                        Content="Get Question"
+                        Click="GetQuestionButton_Click"
                         Margin="5"/>
                     <StackPanel
                         Grid.Row="2"
@@ -179,13 +181,30 @@
                             FontWeight="Bold"
                             Name="OptionFourTextBlock"/>
                     </StackPanel>
-                    <ListView
+                    <StackPanel
                         Grid.Row="3"
                         Grid.Column="1"
                         Grid.ColumnSpan="3"
-                        Name="SubmissionsListView"
+                        Name="SubmissionsStackPanel"
+                        Orientation="Vertical"
                         Margin="5">
-                    </ListView>
+                        <TextBlock
+                            Text=""
+                            FontWeight="Bold"
+                            Name="OptionOneSubmissionsTextBlock"/>
+                        <TextBlock
+                            Text=""
+                            FontWeight="Bold"
+                            Name="OptionTwoSubmissionsTextBlock"/>
+                        <TextBlock
+                            Text=""
+                            FontWeight="Bold"
+                            Name="OptionThreeSubmissionsTextBlock"/>
+                        <TextBlock
+                            Text=""
+                            FontWeight="Bold"
+                            Name="OptionFourSubmissionsTextBlock"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
