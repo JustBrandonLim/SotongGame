@@ -30,11 +30,11 @@ void setup()
   WiFi.setPins(8, 2, A3, -1);
 
   //Console Monitor for Tinyduino
-  SerialMonitorInterface.begin(9600);
-  while (!SerialMonitorInterface)
-  {
-    ;
-  }
+  //SerialMonitorInterface.begin(9600);
+  //while (!SerialMonitorInterface)
+  //{
+    //;
+  //}
   if (WiFi.status() == WL_NO_SHIELD) {
     SerialMonitorInterface.println("WiFi shield not present");
     // don't continue:
@@ -203,7 +203,16 @@ void button()
     else 
     {
       SerialMonitorInterface.println("Connection failed");
-      menu(); 
+      SerialMonitorInterface.println("Connection failed");
+      display.clearWindow(0, 0, 96, 64);
+      display.drawRect(0, 0, 96, 64, TSRectangleFilled, RED);
+      display.setFont(liberationSans_10ptFontInfo);
+      display.setCursor(0,20);
+      display.fontColor(WHITE,RED);
+      display.print("Connection failed");
+      delay (5000);
+      display.clearWindow(0, 0, 96, 64);
+      menu();
     }
     delay(3000);
     display.clearWindow(0, 0, 96, 64);
@@ -236,9 +245,18 @@ void button()
       client.println("Content-Length: 1");
       client.println();
     }
+    //If connection Fails
     else 
     {
       SerialMonitorInterface.println("Connection failed");
+      display.clearWindow(0, 0, 96, 64);
+      display.drawRect(0, 0, 96, 64, TSRectangleFilled, YELLOW);
+      display.setFont(liberationSans_10ptFontInfo);
+      display.setCursor(0,20);
+      display.fontColor(WHITE,YELLOW);
+      display.print("Connection failed");
+      delay (5000);
+      display.clearWindow(0, 0, 96, 64);
       menu(); 
     }
     delay(3000);
@@ -250,7 +268,7 @@ void button()
     display.println("          ");
   }
 
-  //Option 3
+  //Option 3 (Top Right) 
   if (display.getButtons(TSButtonUpperRight)) 
   {
     display.clearWindow(0, 0, 96, 64);
@@ -275,6 +293,14 @@ void button()
     else 
     {
       SerialMonitorInterface.println("Connection failed");
+      display.clearWindow(0, 0, 96, 64);
+      display.drawRect(0, 0, 96, 64, TSRectangleFilled, BLUE);
+      display.setFont(liberationSans_10ptFontInfo);
+      display.setCursor(0,20);
+      display.fontColor(WHITE,BLUE);
+      display.print("Connection failed");
+      delay (5000);
+      display.clearWindow(0, 0, 96, 64);
       menu(); 
     }
     delay(3000);
@@ -286,7 +312,7 @@ void button()
     display.println("          ");
   }
 
-  //Option 4
+  //Option 4 (Bottom Right)
   if (display.getButtons(TSButtonLowerRight)) 
   {
     display.clearWindow(0, 0, 96, 64);
@@ -311,6 +337,14 @@ void button()
     else 
     {
       SerialMonitorInterface.println("Connection failed");
+      display.clearWindow(0, 0, 96, 64);
+      display.drawRect(0, 0, 96, 64, TSRectangleFilled, DGREEN);
+      display.setFont(liberationSans_10ptFontInfo);
+      display.setCursor(0,20);
+      display.fontColor(WHITE,DGREEN);
+      display.print("Connection failed");
+      delay (5000);
+      display.clearWindow(0, 0, 96, 64);
       menu(); 
     }
     delay(3000);
