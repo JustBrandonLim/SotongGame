@@ -6,32 +6,30 @@
 #define YELLOW          0x1F
 #define WHITE           0xFF
 #define ALPHA           0xFE
-
 #if defined (ARDUINO_ARCH_AVR)
 #define SerialMonitorInterface Serial
 #elif defined(ARDUINO_ARCH_SAMD)
 #define SerialMonitorInterface SerialUSB
 #endif
-
 #include <TinyScreen.h>
 #include <WiFi101.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <STBLE.h>
 WiFiClient client;
-
 #include "Wifi_information.h" 
 
 TinyScreen display = TinyScreen(0);
-char ssid[] = SECRET_SSID;        // your network SSID (name)
-char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
+char ssid[] = SECRET_SSID;       // your network SSID (name)
+char pass[] = SECRET_PASS;       // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;     // the WiFi radio's status
-int answer = 2;
 
 void setup() 
 {
+  //Set pins for this particular mod
   WiFi.setPins(8, 2, A3, -1);
 
+  //Console Monitor for Tinyduino
   SerialMonitorInterface.begin(9600);
   while (!SerialMonitorInterface)
   {
@@ -63,17 +61,11 @@ void setup()
 void loop() 
 {
   printCurrentNet();
-
   while (client.available()) 
   {
     char c = client.read();
     SerialMonitorInterface.write(c);
   }
-  /*
-  Code to get temperature here
-  */
-  httpRequest(answer);
-  delay(10000); // 5min
 
   //Initial Loading Screen
   display.setFlip(true);
@@ -88,34 +80,15 @@ void loop()
 
   //Menu
   menu();
-  
-  //while(1)
-  //{
-    //Return int values
-    //button(&answer);
-    //print value  
-  //}
-  
-}
-void httpRequest(int answer) 
-{
-  String request = "POST /api/question/submitanswer/2 HTTP/1.1";
 
-  // if there's a successful connection:
-  IPAddress server(118,200,54,209);
-  if (client.connect(server, 9000)) 
+  //Constatly loop main function to lookout for inputs
+  while(1)
   {
-    SerialMonitorInterface.println("connected to server");
-    client.println(request);
-    client.println("Host: 118.200.54.209");
-    client.println("Content-Length: 1");
-    client.println();
-  }
-  else {
-    SerialMonitorInterface.println("Connection failed");
+    button();
   }
 }
 
+//---------------------Wifi Settings-------------------------
 void printWiFiData() 
 {
   // print your WiFi shield's IP address:
@@ -167,7 +140,9 @@ void printMacAddress(byte mac[]) {
   }
   SerialMonitorInterface.println();
 }
+//---------------------End of Wifi Settings-------------------------
 
+//--------------------Menu Settings/Interface-----------------------
 void menu()
 {
   //Box Background
@@ -176,43 +151,60 @@ void menu()
   display.drawRect(50, 0, 49, 32, TSRectangleFilled, BLUE);
   display.drawRect(50, 32, 50, 32, TSRectangleFilled, DGREEN);
 
-  //Option 1
+  //Option 1 display
   display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(0,7);
   display.fontColor(WHITE,RED);
   display.print("Option 1");
 
-  //Option 2
+  //Option 2 display
   display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(0,40);
   display.fontColor(WHITE,YELLOW);
   display.print("Option 2");
 
-  //Option 3
+  //Option 3 display
   display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(50,7);
   display.fontColor(WHITE,BLUE);
   display.print("Option 3");
 
-  //Option 4
+  //Option 4 display
   display.setFont(liberationSans_10ptFontInfo);
   display.setCursor(50,40);
   display.fontColor(WHITE,DGREEN);
   display.print("Option 4");  
 }
 
-void button(int *answer) 
+//-----------------Button Function/Http Request--------------------
+void button() 
 {
-  //Option 1
+  //Option 1 (Top Left) 
   if (display.getButtons(TSButtonUpperLeft)) 
   {
-    *answer = 1;
     display.clearWindow(0, 0, 96, 64);
     display.drawRect(0, 0, 96, 64, TSRectangleFilled, RED);
     display.setFont(liberationSans_10ptFontInfo);
     display.setCursor(0,20);
     display.fontColor(WHITE,RED);
     display.print("Option 1 Choosen");
+    //HTTP Request
+    String request = "POST /api/question/submitanswer/1 HTTP/1.1";
+    // if there's a successful connection:
+    IPAddress server(118,200,54,209);
+    if (client.connect(server, 9000)) 
+    {
+      SerialMonitorInterface.println("connected to server");
+      client.println(request);
+      client.println("Host: 118.200.54.209");
+      client.println("Content-Length: 1");
+      client.println();
+    }
+    else 
+    {
+      SerialMonitorInterface.println("Connection failed");
+      menu(); 
+    }
     delay(3000);
     display.clearWindow(0, 0, 96, 64);
     menu();   
@@ -222,16 +214,33 @@ void button(int *answer)
     display.println("          ");
   }
 
-  //Option 2
+  //Option 2 (Bottom Left) 
   if (display.getButtons(TSButtonLowerLeft)) 
   {
-    *answer = 2;
     display.clearWindow(0, 0, 96, 64);
     display.drawRect(0, 0, 96, 64, TSRectangleFilled, YELLOW);
     display.setFont(liberationSans_10ptFontInfo);
     display.setCursor(0,20);
     display.fontColor(WHITE,YELLOW);
     display.print("Option 2 Choosen"); 
+
+    //HTTP Request
+    String request = "POST /api/question/submitanswer/2 HTTP/1.1";
+    // if there's a successful connection:
+    IPAddress server(118,200,54,209);
+    if (client.connect(server, 9000)) 
+    {
+      SerialMonitorInterface.println("connected to server");
+      client.println(request);
+      client.println("Host: 118.200.54.209");
+      client.println("Content-Length: 1");
+      client.println();
+    }
+    else 
+    {
+      SerialMonitorInterface.println("Connection failed");
+      menu(); 
+    }
     delay(3000);
     display.clearWindow(0, 0, 96, 64);
     menu(); 
@@ -244,13 +253,30 @@ void button(int *answer)
   //Option 3
   if (display.getButtons(TSButtonUpperRight)) 
   {
-    *answer = 3;
     display.clearWindow(0, 0, 96, 64);
     display.drawRect(0, 0, 96, 64, TSRectangleFilled, BLUE);
     display.setFont(liberationSans_10ptFontInfo);
     display.setCursor(0,20);
     display.fontColor(WHITE,BLUE);
     display.print("Option 3 Choosen"); 
+    
+    //HTTP Request
+    String request = "POST /api/question/submitanswer/3 HTTP/1.1";
+    // if there's a successful connection:
+    IPAddress server(118,200,54,209);
+    if (client.connect(server, 9000)) 
+    {
+      SerialMonitorInterface.println("connected to server");
+      client.println(request);
+      client.println("Host: 118.200.54.209");
+      client.println("Content-Length: 1");
+      client.println();
+    }
+    else 
+    {
+      SerialMonitorInterface.println("Connection failed");
+      menu(); 
+    }
     delay(3000);
     display.clearWindow(0, 0, 96, 64);
     menu();
@@ -263,13 +289,30 @@ void button(int *answer)
   //Option 4
   if (display.getButtons(TSButtonLowerRight)) 
   {
-    *answer = 4;
     display.clearWindow(0, 0, 96, 64);
     display.drawRect(0, 0, 96, 64, TSRectangleFilled, DGREEN);
     display.setFont(liberationSans_10ptFontInfo);
     display.setCursor(0,20);
     display.fontColor(WHITE,DGREEN);
     display.print("Option 4 Choosen"); 
+    
+    //HTTP Request
+    String request = "POST /api/question/submitanswer/4 HTTP/1.1";
+    // if there's a successful connection:
+    IPAddress server(118,200,54,209);
+    if (client.connect(server, 9000)) 
+    {
+      SerialMonitorInterface.println("connected to server");
+      client.println(request);
+      client.println("Host: 118.200.54.209");
+      client.println("Content-Length: 1");
+      client.println();
+    }
+    else 
+    {
+      SerialMonitorInterface.println("Connection failed");
+      menu(); 
+    }
     delay(3000);
     display.clearWindow(0, 0, 96, 64);
     menu();
@@ -277,5 +320,6 @@ void button(int *answer)
   else 
   {
     display.println("          ");
-  }
+  } 
 }
+//------------End of Button Function/Http Request---------------
