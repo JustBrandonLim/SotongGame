@@ -101,7 +101,7 @@ namespace TinyStudent
             #pragma warning restore CS8601 // Possible null reference assignment.
             OptionOneSubmissionsTextBlock.Text = "Option 1: " + optionOneCount.ToString();
             OptionTwoSubmissionsTextBlock.Text = "Option 2: " + optionTwoCount.ToString();
-            OptionThreeSubmissionsTextBlock.Text = "Option 4: " + optionThreeCount.ToString();
+            OptionThreeSubmissionsTextBlock.Text = "Option 3: " + optionThreeCount.ToString();
             OptionFourSubmissionsTextBlock.Text = "Option 4: " + optionFourCount.ToString();
         }
 

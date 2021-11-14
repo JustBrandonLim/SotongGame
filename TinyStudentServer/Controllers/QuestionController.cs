@@ -36,10 +36,18 @@ namespace TinyStudentServer
             if (questions.Count - 1 < questionIndex)
                 return new Question("NO AVAILABLE QUESTIONS", null, 0);
 
-            var question = questions[questionIndex];
-            questionIndex++;
+            try
+            {
+                var question = questions[questionIndex];
+                questionIndex++;
 
-            return question;
+                return question;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return new Question("NO AVAILABLE QUESTIONS", null, 0);
+            }
         }
 
         [Route("api/question/getsubmissions")]
@@ -51,7 +59,16 @@ namespace TinyStudentServer
             if (questions.Count == 0)
                 return new Answer();
 
-            return answers[questionIndex];
+            try
+            {
+                return answers[questionIndex - 1];
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+
+                return new Answer();
+            }
         }
         #endregion
 
@@ -75,7 +92,14 @@ namespace TinyStudentServer
         {
             System.Diagnostics.Debug.WriteLine("POST SubmitAnswer({0})", answer);
 
-            answers[questionIndex].Answers.Add(answer);
+            try
+            {
+                answers[questionIndex - 1].Answers.Add(answer);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
 
             return Ok();
         }
