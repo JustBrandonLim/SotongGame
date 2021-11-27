@@ -15,7 +15,6 @@
 #include <WiFi101.h>
 #include <SPI.h>
 #include <Wire.h>
-#include <STBLE.h>
 WiFiClient client;
 #include "Wifi_information.h" 
 
@@ -28,26 +27,17 @@ void setup()
 {
   //Set pins for this particular mod
   WiFi.setPins(8, 2, A3, -1);
-
-  //Console Monitor for Tinyduino
-  //SerialMonitorInterface.begin(9600);
-  //while (!SerialMonitorInterface)
-  //{
-    //;
-  //}
-  if (WiFi.status() == WL_NO_SHIELD) {
+  if (WiFi.status() == WL_NO_SHIELD) 
+  {
     SerialMonitorInterface.println("WiFi shield not present");
     // don't continue:
     while (true);
   }
-  while ( status != WL_CONNECTED) {
+  while ( status != WL_CONNECTED) 
+  {
     SerialMonitorInterface.print("Attempting to connect to WPA SSID: ");
     SerialMonitorInterface.println(ssid);
-    //SerialMonitorInterface.print("With password: " );
-    //SerialMonitorInterface.print(pass);
-    // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
-
     // wait 10 seconds for connection:
     delay(10000);
   }
@@ -66,7 +56,6 @@ void loop()
     char c = client.read();
     SerialMonitorInterface.write(c);
   }
-
   //Initial Loading Screen
   display.setFlip(true);
   display.setFont(liberationSans_14ptFontInfo);
@@ -128,13 +117,17 @@ void printCurrentNet()
   SerialMonitorInterface.println();
 }
 
-void printMacAddress(byte mac[]) {
-  for (int i = 5; i >= 0; i--) {
-    if (mac[i] < 16) {
+void printMacAddress(byte mac[]) 
+{
+  for (int i = 5; i >= 0; i--) 
+  {
+    if (mac[i] < 16) 
+    {
       SerialMonitorInterface.print("0");
     }
     SerialMonitorInterface.print(mac[i], HEX);
-    if (i > 0) {
+    if (i > 0) 
+    {
       SerialMonitorInterface.print(":");
     }
   }
